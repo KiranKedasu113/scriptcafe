@@ -343,8 +343,11 @@ export function MenuPage() {
                     src={item.image_url || getFoodImageByName(item.name)}
                     className="dish-img"
                     alt={item.name}
+                    loading="lazy"
+                    onLoad={(e) => e.target.classList.add('loaded')}
                     onError={(e) => {
                       e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=80';
+                      e.target.classList.add('loaded');
                     }}
                   />
                   <div className="veg-tag-badge">

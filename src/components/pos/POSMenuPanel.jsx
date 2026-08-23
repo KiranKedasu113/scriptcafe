@@ -109,7 +109,11 @@ export function POSMenuPanel({ onAddItem }) {
                   src={item.image_url || getFoodImageByName(item.name)}
                   alt={item.name}
                   loading="lazy"
-                  onError={e => { e.target.src = getFoodImageByName(item.name); }}
+                  onLoad={(e) => e.target.classList.add('loaded')}
+                  onError={e => {
+                    e.target.src = getFoodImageByName(item.name);
+                    e.target.classList.add('loaded');
+                  }}
                 />
               </div>
               <div className="pick-card-name">

@@ -285,7 +285,11 @@ export function MenuManagementPage() {
                         width={42}
                         height={42}
                         loading="lazy"
-                        onError={e => { e.target.src = getFoodImageByName(name); }}
+                        onLoad={(e) => e.target.classList.add('loaded')}
+                        onError={e => {
+                          e.target.src = getFoodImageByName(name);
+                          e.target.classList.add('loaded');
+                        }}
                       />
                     </td>
                     {/* Type */}

@@ -47,6 +47,64 @@ body {
 }
 
 /* ============================================================
+   Global Image Loading — Shimmer Skeleton + Fade-In
+   Prevents blank flashes and layout glitches on image load
+   ============================================================ */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes imgFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Applied to ALL image containers as a default background */
+.dish-img-wrap,
+.img-box,
+.item-img-container,
+.adm-thumb,
+.sheet-img,
+.brand-mark {
+  background: linear-gradient(
+    90deg,
+    #1a1512 25%,
+    #2a221a 50%,
+    #1a1512 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+/* Once image is visible, stop shimmer, fade image in */
+.dish-img-wrap img,
+.img-box img,
+.item-img-container img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.dish-img-wrap img.loaded,
+.img-box img.loaded,
+.item-img-container img.loaded {
+  opacity: 1;
+  animation: imgFadeIn 0.3s ease forwards;
+}
+
+/* adm-thumb inline img fade */
+.adm-thumb {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.adm-thumb.loaded {
+  opacity: 1;
+}
+
+/* ============================================================
    Customer Menu Page — matches ishacafe.store exactly
    ============================================================ */
 .menu-page-wrap {
