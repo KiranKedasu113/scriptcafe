@@ -1,6 +1,6 @@
 import { formatCurrency } from '../../utils/formatCurrency';
 import { printBill, printKOT } from '../../services/printService';
-import { updateOrderStatus } from '../../services/staffOrderService';
+import { completeOrderWithFallback } from '../../services/staffOrderService';
 
 const STATUS_COLOR = {
   NEW: 'NEW',
@@ -24,7 +24,7 @@ export function ActiveOrdersPanel({ active, completed, onPay, onRefresh }) {
     }
 
     try {
-      await updateOrderStatus(order.id, 'COMPLETED');
+      await completeOrderWithFallback(order.id, order.order_status);
       if (onRefresh) onRefresh();
     } catch (err) {
       console.error("Failed to update status to COMPLETED:", err);

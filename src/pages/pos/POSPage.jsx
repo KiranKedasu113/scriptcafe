@@ -7,7 +7,7 @@ import { PaymentModal } from '../../components/pos/PaymentModal';
 import { usePosCart } from './usePosCart';
 import { useCreateOrder } from '../../hooks/useCreateOrder';
 import { useRealtimeOrders } from '../../hooks/useRealtimeOrders';
-import { fetchActiveAndPrintedOrders, updateOrderStatus } from '../../services/staffOrderService';
+import { fetchActiveAndPrintedOrders, updateOrderStatus, completeOrderWithFallback } from '../../services/staffOrderService';
 import { fetchAllTables } from '../../services/tableService';
 import { ORDER_SOURCE, ORDER_TYPE } from '../../utils/constants';
 import {
@@ -131,7 +131,7 @@ export function POSPage() {
 
       // Auto-complete the order in database since cashier orders are completed immediately
       try {
-        await updateOrderStatus(result.orderId, 'COMPLETED');
+        await completeOrderWithFallback(result.orderId, 'NEW');
       } catch (err) {
         console.error("Failed to auto-complete POS order:", err);
       }
