@@ -1,7 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export function StaffNav({ children }) {
   const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  async function handleSignOut() {
+    try {
+      await logout();
+    } catch {}
+    navigate('/staff/login', { replace: true, state: null });
+  }
 
   return (
     <nav className="staff-nav">
@@ -48,7 +57,7 @@ export function StaffNav({ children }) {
 
       <div className="staff-nav-user" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
         {children}
-        <button className="btn btn-outline btn-sm" onClick={logout}>
+        <button className="btn btn-outline btn-sm" onClick={handleSignOut}>
           Sign out
         </button>
       </div>

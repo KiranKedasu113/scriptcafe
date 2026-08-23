@@ -7,7 +7,9 @@ export function LoginPage() {
   const location = useLocation();
 
   const defaultRoute = role === 'ADMIN' ? '/admin' : role === 'KITCHEN' ? '/kitchen' : '/cashier';
-  const targetRoute = location.state?.from || defaultRoute;
+  const targetRoute = (role === 'ADMIN' && (!location.state?.from || location.state?.from === '/cashier'))
+    ? '/admin'
+    : (location.state?.from || defaultRoute);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
