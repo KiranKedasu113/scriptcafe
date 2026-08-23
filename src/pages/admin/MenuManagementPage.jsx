@@ -278,9 +278,13 @@ export function MenuManagementPage() {
                     </td>
                     {/* Image thumbnail */}
                     <td>
-                      <img className="adm-thumb"
+                      <img
+                        className="adm-thumb"
                         src={imageUrl || getFoodImageByName(name)}
                         alt={name}
+                        width={42}
+                        height={42}
+                        loading="lazy"
                         onError={e => { e.target.src = getFoodImageByName(name); }}
                       />
                     </td>

@@ -1018,7 +1018,27 @@ table.adm-table td {
 }
 table.adm-table tr:hover td { background: rgba(216,161,58,.04); }
 table.adm-table tr.adm-saving td { opacity: .6; }
-.adm-thumb { width: 42px; height: 42px; border-radius: 6px; object-fit: cover; background: #1a1512; border: 1px solid var(--line); }
+/* Lock image column to stop row height shifts */
+table.adm-table td:nth-child(2) {
+  width: 62px;
+  min-width: 62px;
+  max-width: 62px;
+  padding: 6px 10px;
+  vertical-align: middle;
+  line-height: 0;
+}
+.adm-thumb {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: #1a1512;
+  border: 1px solid var(--line);
+  display: block;
+  flex-shrink: 0;
+}
 .adm-price-input {
   width: 95px; padding: 6px 10px; border-radius: 6px; border: 1.5px solid var(--line);
   background: var(--bg-card); color: var(--gold); font-family: 'Roboto Mono', monospace;
