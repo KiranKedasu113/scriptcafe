@@ -25,7 +25,7 @@ export function AdminLayout() {
     <div className="adm-wrap">
       {/* Header */}
       <header className="adm-header">
-        <div className="adm-brand">
+        <div className="adm-brand" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <img
             src="https://www.ishacafe.store/logo.png"
             alt="ISHA CAFE"
@@ -41,9 +41,28 @@ export function AdminLayout() {
               e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80';
             }}
           />
-          <div>
-            <h1 className="adm-title">ISHA <span>CAFE</span> — Admin Portal</h1>
-            <div className="adm-subtitle">Menu Manager · Orders · Table QR · Staff</div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <h1 style={{
+              margin: 0,
+              fontSize: '22px',
+              fontFamily: 'Poppins',
+              fontWeight: 'bold',
+              color: 'var(--cream)',
+              lineHeight: 1.1,
+              letterSpacing: '0.5px'
+            }}>
+              ISHA <span style={{ color: 'var(--gold)' }}>CAFE</span> <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--gold-soft)', marginLeft: '6px' }}>— Admin Portal</span>
+            </h1>
+            <span style={{
+              fontSize: '9.5px',
+              color: 'var(--cream-dim)',
+              letterSpacing: '1.2px',
+              textTransform: 'uppercase',
+              marginTop: '3px',
+              fontWeight: 'bold'
+            }}>
+              GOOD FOOD, GOOD MOOD!
+            </span>
           </div>
         </div>
         <div className="adm-header-actions">
