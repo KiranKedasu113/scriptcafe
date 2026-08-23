@@ -3,16 +3,18 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export function LoginPage() {
-  const { status, login, loginAsDemoAdmin } = useAuth();
+  const { status, role, login } = useAuth();
   const location = useLocation();
-  const from = location.state?.from || '/cashier';
+
+  const defaultRoute = role === 'ADMIN' ? '/admin' : role === 'KITCHEN' ? '/kitchen' : '/cashier';
+  const targetRoute = location.state?.from || defaultRoute;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  if (status === 'signed-in') return <Navigate to={from} replace />;
+  if (status === 'signed-in') return <Navigate to={targetRoute} replace />;
 
   async function handleSubmit(e) {
     e.preventDefault();
