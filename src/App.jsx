@@ -86,23 +86,46 @@ export default function App() {
               className="developer-credit-footer"
               style={{
                 width: '100%',
-                padding: '12px 16px',
+                padding: '14px 16px',
                 textAlign: 'center',
-                fontSize: '11.5px',
+                fontSize: '12px',
                 fontWeight: '500',
-                fontFamily: 'Poppins, sans-serif',
+                fontFamily: "'Poppins', sans-serif",
                 color: 'var(--cream-dim)',
                 background: 'rgba(10, 7, 3, 0.4)',
-                borderTop: '1px solid rgba(216, 161, 58, 0.12)',
-                letterSpacing: '0.4px',
+                borderTop: '1px solid rgba(216, 161, 58, 0.15)',
+                letterSpacing: '0.5px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '4px',
+                gap: '5px',
                 marginTop: 'auto',
               }}
             >
-              designed &amp; developed by <span style={{ color: 'var(--gold)', fontWeight: 700 }}>arohi.dev</span>
+              <span>designed &amp; developed by</span>
+              <a
+                href="https://arohi.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: 'var(--gold)',
+                  fontWeight: 800,
+                  textDecoration: 'none',
+                  letterSpacing: '0.6px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#ffffff';
+                  e.currentTarget.style.textDecoration = 'underline';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = 'var(--gold)';
+                  e.currentTarget.style.textDecoration = 'none';
+                }}
+              >
+                arohi.dev
+              </a>
             </footer>
           </div>
         </BrowserRouter>
