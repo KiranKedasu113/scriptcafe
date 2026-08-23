@@ -71,6 +71,13 @@ export function POSPage() {
     fetchAllTables().then(setTables).catch(() => {});
     loadOrders();
     connectQZ(false);
+
+    // Auto-refresh orders every 3 seconds so scanned customer orders update live
+    const interval = setInterval(() => {
+      loadOrders();
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, [loadOrders, connectQZ]);
 
   useRealtimeOrders({ onChange: loadOrders });
