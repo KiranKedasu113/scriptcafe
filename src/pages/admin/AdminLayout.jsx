@@ -26,7 +26,21 @@ export function AdminLayout() {
       {/* Header */}
       <header className="adm-header">
         <div className="adm-brand">
-          <div className="adm-logo">ISHA<br />CAFE</div>
+          <img
+            src="https://www.ishacafe.store/logo.png"
+            alt="ISHA CAFE"
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              border: '1.5px solid var(--gold)',
+              boxShadow: '0 0 10px rgba(216,161,58,0.4)',
+            }}
+            onError={(e) => {
+              e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80';
+            }}
+          />
           <div>
             <h1 className="adm-title">ISHA <span>CAFE</span> — Admin Portal</h1>
             <div className="adm-subtitle">Menu Manager · Orders · Table QR · Staff</div>
