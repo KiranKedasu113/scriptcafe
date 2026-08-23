@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { CafeLogo } from '../../components/common/CafeLogo';
 
 const TABS = [
   { to: '/admin', label: '📋 Menu Manager & Add Items', end: true },
@@ -26,21 +27,7 @@ export function AdminLayout() {
       {/* Header */}
       <header className="adm-header">
         <div className="adm-brand" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <img
-            src="https://www.ishacafe.store/logo.png"
-            alt="ISHA CAFE"
-            style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '50%',
-              objectFit: 'cover',
-              border: '1.5px solid var(--gold)',
-              boxShadow: '0 0 10px rgba(216,161,58,0.4)',
-            }}
-            onError={(e) => {
-              e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80';
-            }}
-          />
+          <CafeLogo size={48} />
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <h1 style={{
               margin: 0,
