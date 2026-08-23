@@ -47,36 +47,6 @@ body {
 }
 
 /* ============================================================
-   Global Image Normalization
-   All images across the app fill their container perfectly.
-   The container controls size — the image just fills it.
-   ============================================================ */
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  object-fit: cover;
-  object-position: center center;
-  /* Prevent layout shift while loading */
-  background: #1a1512;
-}
-/* When inside a fixed-size container, override height:auto so image fills fully */
-[class*="-wrap"] img,
-[class*="-box"] img,
-[class*="-thumb"],
-[class*="-img"],
-.img-box img,
-.dish-img-wrap img,
-.item-img-container img,
-.brand-mark {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  display: block;
-}
-
-/* ============================================================
    Customer Menu Page — matches ishacafe.store exactly
    ============================================================ */
 .menu-page-wrap {
