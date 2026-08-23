@@ -7,6 +7,7 @@ import { useCreateOrder } from '../../hooks/useCreateOrder';
 import { ORDER_SOURCE, ORDER_TYPE } from '../../utils/constants';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { getFoodImageByName } from '../../utils/foodImages';
+import { CafeLogo } from '../../components/common/CafeLogo';
 
 const CAT_COLORS = {
   'Irani':          '#7c4a1e',
@@ -276,14 +277,7 @@ export function MenuPage() {
       {/* 2. BRAND HEADER */}
       <header className="mob-header" style={{ justifyContent: 'center' }}>
         <div className="brand-wrap">
-          <img
-            src="https://www.ishacafe.store/logo.png"
-            alt="ISHA CAFE"
-            className="brand-mark"
-            onError={(e) => {
-              e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80';
-            }}
-          />
+          <CafeLogo size={48} className="brand-mark" />
           <div className="brand-title">
             <h1>ISHA <span>CAFE</span></h1>
             <div className="tag">Good Food, Good Mood!</div>
