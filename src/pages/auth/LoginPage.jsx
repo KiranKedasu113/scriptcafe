@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { fetchMyStaffRole } from '../../services/authService';
 
 export function LoginPage() {
-  const { status, role, login } = useAuth();
+  const { status, role, login, logout } = useAuth();
   const location = useLocation();
 
   const [loginMode, setLoginMode] = useState('ADMIN'); // 'ADMIN' | 'CASHIER'
@@ -12,10 +13,10 @@ export function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  const defaultRoute = role === 'ADMIN' ? '/admin' : role === 'KITCHEN' ? '/kitchen' : '/cashier';
-  const targetRoute = (role === 'ADMIN' && (!location.state?.from || location.state?.from === '/cashier'))
-    ? '/admin'
-    : (location.state?.from || defaultRoute);
+  // If logging in via Cashier button, send to /cashier. If via Admin button, send to /admin.
+  const targetRoute = (loginMode === 'CASHIER')
+    ? '/cashier'
+    : (role === 'ADMIN' ? '/admin' : (location.state?.from || '/admin'));
 
   if (status === 'signed-in') return <Navigate to={targetRoute} replace />;
 
@@ -35,6 +36,17 @@ export function LoginPage() {
     setError(null);
     try {
       await login(email, password);
+
+      // Validate mode permissions: Cashier credentials CANNOT be used on Admin Login tab
+      const staffRoleObj = await fetchMyStaffRole();
+      const userRole = staffRoleObj?.role;
+
+      if (loginMode === 'ADMIN' && userRole !== 'ADMIN') {
+        await logout();
+        setError('⚠️ Cashier credentials cannot be used for Admin Login. Please switch to the Cashier Login tab.');
+        setSubmitting(false);
+        return;
+      }
     } catch (err) {
       setError(err.message || 'Sign-in failed');
     } finally {
