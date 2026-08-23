@@ -1,13 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
-const url = import.meta.env.VITE_SUPABASE_URL;
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const url = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
+const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder';
 
-if (!url || !anonKey) {
-  // Fail loudly in dev rather than silently hitting undefined endpoints.
-  // eslint-disable-next-line no-console
-  console.error(
-    'Missing VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY. Copy .env.example to .env and fill in your project values.'
+if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+  console.warn(
+    'Missing VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY in Vercel environment variables. Please add them in Vercel Project Settings.'
   );
 }
 
