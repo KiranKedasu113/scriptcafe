@@ -86,19 +86,19 @@ export default function App() {
               className="developer-credit-footer"
               style={{
                 width: '100%',
-                padding: '16px 20px',
+                padding: '8px 12px',
                 textAlign: 'center',
-                fontSize: '11px',
+                fontSize: '9.5px',
                 fontFamily: "'Plus Jakarta Sans', 'Outfit', sans-serif",
                 color: 'rgba(230, 218, 196, 0.55)',
                 background: 'linear-gradient(180deg, rgba(14, 10, 5, 0) 0%, rgba(14, 10, 5, 0.8) 100%)',
-                borderTop: '1px solid rgba(216, 161, 58, 0.12)',
-                letterSpacing: '1.2px',
+                borderTop: '1px solid rgba(216, 161, 58, 0.1)',
+                letterSpacing: '1px',
                 textTransform: 'uppercase',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
+                gap: '6px',
                 marginTop: 'auto',
               }}
             >
@@ -110,37 +110,37 @@ export default function App() {
                 style={{
                   fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif",
                   fontWeight: 800,
-                  fontSize: '12px',
-                  letterSpacing: '0.8px',
+                  fontSize: '10.5px',
+                  letterSpacing: '0.6px',
                   color: '#d8a13a',
                   background: 'rgba(216, 161, 58, 0.08)',
                   border: '1px solid rgba(216, 161, 58, 0.25)',
-                  padding: '3px 12px',
-                  borderRadius: '20px',
+                  padding: '2px 8px',
+                  borderRadius: '14px',
                   textDecoration: 'none',
                   cursor: 'pointer',
-                  boxShadow: '0 0 10px rgba(216, 161, 58, 0.15)',
+                  boxShadow: '0 0 8px rgba(216, 161, 58, 0.15)',
                   transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '4px',
+                  gap: '3px',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = '#120d06';
                   e.currentTarget.style.background = '#d8a13a';
                   e.currentTarget.style.borderColor = '#d8a13a';
-                  e.currentTarget.style.boxShadow = '0 0 16px rgba(216, 161, 58, 0.5)';
+                  e.currentTarget.style.boxShadow = '0 0 14px rgba(216, 161, 58, 0.5)';
                   e.currentTarget.style.transform = 'translateY(-1px)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = '#d8a13a';
                   e.currentTarget.style.background = 'rgba(216, 161, 58, 0.08)';
                   e.currentTarget.style.borderColor = 'rgba(216, 161, 58, 0.25)';
-                  e.currentTarget.style.boxShadow = '0 0 10px rgba(216, 161, 58, 0.15)';
+                  e.currentTarget.style.boxShadow = '0 0 8px rgba(216, 161, 58, 0.15)';
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                arohi.dev <span style={{ fontSize: '11px' }}>↗</span>
+                arohi.dev <span style={{ fontSize: '9.5px' }}>↗</span>
               </a>
             </footer>
           </div>
