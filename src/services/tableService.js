@@ -11,13 +11,13 @@ export async function validateTableToken(qrToken) {
 
   const { data, error } = await supabase
     .from('cafe_tables')
-    .select('id, table_number, is_active')
+    .select('id, table_number, qr_token, is_active')
     .eq('qr_token', qrToken)
     .eq('is_active', true)
     .maybeSingle();
 
   if (error) throw error;
-  return data; // null if not found
+  return data ? { ...data, qr_token: data.qr_token || qrToken } : null;
 }
 
 /**

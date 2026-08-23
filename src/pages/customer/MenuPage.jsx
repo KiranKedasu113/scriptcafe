@@ -217,10 +217,11 @@ export function MenuPage() {
   // Submit Order directly from drawer
   const handlePlaceOrder = async () => {
     setCartDrawerOpen(false);
+    const tokenToUse = orderType === ORDER_TYPE.DINE_IN ? (table?.qr_token || qrToken || null) : null;
     const result = await submit({
       source: ORDER_SOURCE.QR,
       orderType,
-      tableQrToken: orderType === ORDER_TYPE.DINE_IN ? table?.qr_token : null,
+      tableQrToken: tokenToUse,
       items: items.map((i) => ({
         menuItemId: i.menuItemId,
         quantity: i.quantity,
@@ -231,8 +232,6 @@ export function MenuPage() {
     if (result) {
       setPlacedOrder(result);
       clearCart();
-    } else {
-      alert("Failed to submit order. Please try again.");
     }
   };
 
