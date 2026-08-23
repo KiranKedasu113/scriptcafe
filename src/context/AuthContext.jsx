@@ -23,12 +23,6 @@ export function AuthProvider({ children }) {
   const resolveRole = useCallback(async (nextSession) => {
     setAuthError(null);
     if (!nextSession) {
-      const demoRole = localStorage.getItem('demo_staff_role');
-      if (demoRole) {
-        setStaffRole({ role: demoRole, fullName: 'Admin Staff' });
-        setStatus('signed-in');
-        return;
-      }
       setStaffRole(null);
       setStatus('signed-out');
       return;
@@ -39,13 +33,15 @@ export function AuthProvider({ children }) {
         setStaffRole(role);
         setStatus('signed-in');
       } else {
-        setStaffRole({ role: 'ADMIN', fullName: 'Admin Staff' });
-        setStatus('signed-in');
+        setStaffRole(null);
+        setStatus('unauthorized');
+        setAuthError('No active staff role assigned to this account.');
       }
     } catch (err) {
-      console.error("resolveRole fallback:", err);
-      setStaffRole({ role: 'ADMIN', fullName: 'Admin Staff' });
-      setStatus('signed-in');
+      console.error("resolveRole error:", err);
+      setStaffRole(null);
+      setStatus('unauthorized');
+      setAuthError(err.message || 'Database error occurred while fetching staff role.');
     }
   }, []);
 
@@ -73,14 +69,7 @@ export function AuthProvider({ children }) {
     await authSignIn(email, password);
   }, []);
 
-  const loginAsDemoAdmin = useCallback(() => {
-    localStorage.setItem('demo_staff_role', 'ADMIN');
-    setStaffRole({ role: 'ADMIN', fullName: 'Admin Staff' });
-    setStatus('signed-in');
-  }, []);
-
   const logout = useCallback(async () => {
-    localStorage.removeItem('demo_staff_role');
     try {
       await authSignOut();
     } catch {}
@@ -90,13 +79,12 @@ export function AuthProvider({ children }) {
 
   const value = {
     session,
-    user: session?.user ?? { email: 'admin@ishacafe.com', id: 'admin-user' },
-    role: staffRole?.role ?? 'ADMIN',
-    fullName: staffRole?.fullName ?? 'Admin Staff',
+    user: session?.user ?? null,
+    role: staffRole?.role ?? null,
+    fullName: staffRole?.fullName ?? null,
     status,
     authError,
     login,
-    loginAsDemoAdmin,
     logout,
     signOut: logout,
   };
