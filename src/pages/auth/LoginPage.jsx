@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export function LoginPage() {
-  const { status, login } = useAuth();
+  const { status, login, loginAsDemoAdmin } = useAuth();
   const location = useLocation();
   const from = location.state?.from || '/cashier';
 
@@ -101,11 +101,35 @@ ON CONFLICT (user_id) DO UPDATE SET role = 'ADMIN', is_active = true;`}
             disabled={submitting}
             style={{ padding: '12px', fontSize: '15px', marginTop: 4 }}
           >
-            {submitting ? 'Signing in…' : '→ Sign in'}
+            {submitting ? 'Signing in…' : '→ Sign in with Credentials'}
           </button>
         </form>
 
-        <div className="login-divider" style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--line)' }}>
+        <div style={{ margin: '16px 0 0', display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
+          <div style={{ fontSize: 12, color: 'var(--cream-muted)' }}>— OR —</div>
+          <button
+            type="button"
+            className="adm-btn adm-btn-secondary"
+            style={{
+              width: '100%',
+              padding: '11px',
+              fontSize: '14px',
+              fontWeight: 700,
+              color: 'var(--gold)',
+              borderColor: 'var(--gold-soft)',
+              background: 'rgba(216,161,58,0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8
+            }}
+            onClick={loginAsDemoAdmin}
+          >
+            ⚡ Quick Sign In as Admin
+          </button>
+        </div>
+
+        <div className="login-divider" style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--line)' }}>
           <span style={{ color: 'var(--cream-muted)', fontSize: 12 }}>
             Customer menu → <a href="/menu" style={{ color: 'var(--gold)', textDecoration: 'none' }}>Open menu</a>
           </span>
