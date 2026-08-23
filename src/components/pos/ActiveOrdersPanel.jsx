@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { printBill, printKOT } from '../../services/printService';
-import { completeOrderWithFallback } from '../../services/staffOrderService';
+import { completeOrderWithFallback, updateOrderStatus } from '../../services/staffOrderService';
 
 const STATUS_COLOR = {
   NEW: 'NEW',
@@ -12,7 +13,50 @@ const STATUS_COLOR = {
   CANCELLED: 'CANCELLED',
 };
 
-export function ActiveOrdersPanel({ active, completed, onPay, onRefresh }) {
+export function ActiveOrdersPanel({ active = [], completed = [], onPay, onRefresh }) {
+  const [clearedIds, setClearedIds] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('cleared_printed_orders') || '[]');
+    } catch {
+      return [];
+    }
+  });
+
+  const visibleActive = active.filter((o) => !clearedIds.includes(o.id));
+  const visibleCompleted = completed.filter((o) => !clearedIds.includes(o.id));
+
+  function handleClearSingle(orderId) {
+    setClearedIds((prev) => {
+      const next = [...prev, orderId];
+      try {
+        localStorage.setItem('cleared_printed_orders', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  }
+
+  function handleClearAllPrinted() {
+    const allPrintedIds = completed.map((o) => o.id);
+    setClearedIds((prev) => {
+      const next = Array.from(new Set([...prev, ...allPrintedIds]));
+      try {
+        localStorage.setItem('cleared_printed_orders', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  }
+
+  async function handleCancelLiveOrder(orderId) {
+    if (!window.confirm('Cancel and clear this order?')) return;
+    try {
+      await updateOrderStatus(orderId, 'CANCELLED');
+      handleClearSingle(orderId);
+      if (onRefresh) onRefresh();
+    } catch (err) {
+      alert(`Failed to cancel order: ${err.message}`);
+    }
+  }
+
   // Prints and marks active order COMPLETED
   async function handlePrintBoth(order) {
     const items = order.order_items || [];
@@ -20,14 +64,14 @@ export function ActiveOrdersPanel({ active, completed, onPay, onRefresh }) {
       await printKOT(order, items);
       await printBill(order, items, null);
     } catch (err) {
-      console.error("Failed to print KOT/Bill:", err);
+      console.error('Failed to print KOT/Bill:', err);
     }
 
     try {
       await completeOrderWithFallback(order.id, order.order_status);
       if (onRefresh) onRefresh();
     } catch (err) {
-      console.error("Failed to update status to COMPLETED:", err);
+      console.error('Failed to update status to COMPLETED:', err);
       alert(`Print succeeded, but failed to complete order in database: ${err.message}`);
     }
   }
@@ -39,32 +83,31 @@ export function ActiveOrdersPanel({ active, completed, onPay, onRefresh }) {
       await printKOT(order, items);
       await printBill(order, items, null);
     } catch (err) {
-      console.error("Failed to re-print KOT/Bill:", err);
+      console.error('Failed to re-print KOT/Bill:', err);
       alert(`Re-print failed: ${err.message}`);
     }
   }
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: 24, marginTop: 14 }}>
-      
       {/* COLUMN 1: LIVE ORDERS */}
       <div className="pos-orders-col">
-        <div className="pos-orders-header" style={{ marginBottom: 16 }}>
+        <div className="pos-orders-header" style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 style={{ margin: 0, color: 'var(--gold)', fontFamily: 'Poppins' }}>🧾 Live Orders</h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 12, color: 'var(--cream-muted)' }}>{active.length} active</span>
+            <span style={{ fontSize: 12, color: 'var(--cream-muted)' }}>{visibleActive.length} active</span>
             <div className="live-dot" />
           </div>
         </div>
 
         <div className="pos-orders-list" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {active.length === 0 ? (
+          {visibleActive.length === 0 ? (
             <div className="empty-state" style={{ background: 'var(--bg-panel)', padding: 30, borderRadius: 12 }}>
               <div style={{ fontSize: 32, marginBottom: 8 }}>✅</div>
               No active orders
             </div>
           ) : (
-            active.map((order) => (
+            visibleActive.map((order) => (
               <div
                 key={order.id}
                 className="pos-order-card"
@@ -108,15 +151,25 @@ export function ActiveOrdersPanel({ active, completed, onPay, onRefresh }) {
                     >
                       🖨️ Print Bill &amp; KOT
                     </button>
-                    {order.payment_status !== 'PAID' && (
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      {order.payment_status !== 'PAID' && (
+                        <button
+                          className="adm-btn adm-btn-secondary"
+                          style={{ flex: 1, justifyContent: 'center', fontSize: 11, padding: '7px 8px' }}
+                          onClick={() => onPay(order)}
+                        >
+                          💳 Collect Payment
+                        </button>
+                      )}
                       <button
                         className="adm-btn adm-btn-secondary"
-                        style={{ justifyContent: 'center', width: '100%', fontSize: 12, padding: '8px 12px' }}
-                        onClick={() => onPay(order)}
+                        style={{ justifyContent: 'center', fontSize: 11, padding: '7px 10px', color: 'var(--red)', borderColor: 'rgba(224,82,82,0.3)' }}
+                        onClick={() => handleCancelLiveOrder(order.id)}
+                        title="Cancel or clear this order"
                       >
-                        💳 Collect Payment
+                        ❌ Clear
                       </button>
-                    )}
+                    </div>
                   </div>
                 </div>
 
@@ -162,19 +215,30 @@ export function ActiveOrdersPanel({ active, completed, onPay, onRefresh }) {
 
       {/* COLUMN 2: PRINTED / COMPLETED ORDERS */}
       <div className="pos-orders-col" style={{ borderLeft: '1px solid var(--line)', paddingLeft: 24 }}>
-        <div className="pos-orders-header" style={{ marginBottom: 16 }}>
+        <div className="pos-orders-header" style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 style={{ margin: 0, color: 'var(--green)', fontFamily: 'Poppins' }}>✅ Printed Orders</h3>
-          <span style={{ fontSize: 12, color: 'var(--cream-muted)' }}>{completed.length} printed</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: 12, color: 'var(--cream-muted)' }}>{visibleCompleted.length} printed</span>
+            {visibleCompleted.length > 0 && (
+              <button
+                className="adm-btn adm-btn-secondary"
+                style={{ padding: '4px 10px', fontSize: 11, background: 'rgba(255,255,255,0.05)', color: 'var(--gold)', borderColor: 'var(--gold-soft)' }}
+                onClick={handleClearAllPrinted}
+              >
+                🧹 Clear List
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="pos-orders-list" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {completed.length === 0 ? (
+          {visibleCompleted.length === 0 ? (
             <div className="empty-state" style={{ background: 'var(--bg-panel)', padding: 30, borderRadius: 12 }}>
               <div style={{ fontSize: 32, marginBottom: 8 }}>🖨️</div>
-              No printed orders yet
+              No printed orders
             </div>
           ) : (
-            completed.map((order) => (
+            visibleCompleted.map((order) => (
               <div
                 key={order.id}
                 className="pos-order-card"
@@ -208,13 +272,21 @@ export function ActiveOrdersPanel({ active, completed, onPay, onRefresh }) {
                     </div>
                   </div>
 
-                  <div>
+                  <div style={{ display: 'flex', gap: 6, width: '100%' }}>
                     <button
                       className="adm-btn adm-btn-secondary"
-                      style={{ justifyContent: 'center', width: '100%', fontSize: 12, padding: '8px 12px', borderStyle: 'dashed' }}
+                      style={{ flex: 1, justifyContent: 'center', fontSize: 11, padding: '7px 8px', borderStyle: 'dashed' }}
                       onClick={() => handleRePrintBoth(order)}
                     >
-                      🖨️ Re-Print Bill &amp; KOT
+                      🖨️ Re-Print
+                    </button>
+                    <button
+                      className="adm-btn adm-btn-secondary"
+                      style={{ justifyContent: 'center', fontSize: 11, padding: '7px 10px', color: 'var(--cream-muted)' }}
+                      onClick={() => handleClearSingle(order.id)}
+                      title="Clear from view"
+                    >
+                      🧹 Clear
                     </button>
                   </div>
                 </div>
@@ -253,7 +325,6 @@ export function ActiveOrdersPanel({ active, completed, onPay, onRefresh }) {
           )}
         </div>
       </div>
-
     </div>
   );
 }
