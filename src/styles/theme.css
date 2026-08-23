@@ -360,18 +360,22 @@ body {
 .pick-card {
   background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px;
   padding: 10px; cursor: pointer;
-  transition: all .2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: border-color .2s ease, box-shadow .2s ease;
   display: flex; flex-direction: column; height: 200px;
+  will-change: transform;
 }
-.pick-card:hover { border-color: rgba(216,161,58,.5); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.35); }
+.pick-card:hover { border-color: rgba(216,161,58,.5); box-shadow: 0 4px 14px rgba(0,0,0,.35); }
 .pick-card.unavailable { opacity: .5; cursor: default; }
-.pick-card.unavailable:hover { transform: none; box-shadow: none; }
+.pick-card.unavailable:hover { box-shadow: none; }
 .img-box {
   width: 100%; height: 105px; border-radius: 8px; overflow: hidden;
   margin-bottom: 7px; position: relative; background: #1a1512; flex-shrink: 0;
 }
-.img-box img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
-.pick-card:hover .img-box img { transform: scale(1.06); }
+.img-box img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block; transition: none;
+}
+.pick-card:hover .img-box img { transform: none; }
 .pick-card-name {
   font-size: 12.5px; font-weight: 700; line-height: 1.3;
   display: flex; gap: 5px; align-items: center; flex-wrap: wrap;
@@ -1515,10 +1519,14 @@ header.mob-header {
 .dish-card:active { transform: scale(0.98); border-color: var(--gold); }
 .dish-card.unavailable { opacity: 0.5; cursor: default; }
 
-.dish-img-wrap { position: relative; width: 95px; height: 95px; flex-shrink: 0; }
+.dish-img-wrap {
+  position: relative; width: 95px; height: 95px; flex-shrink: 0;
+  border-radius: 10px; overflow: hidden; will-change: transform;
+}
 .dish-img {
-  width: 100%; height: 100%; border-radius: 10px; object-fit: cover;
-  background: #110e0c; border: 1px solid var(--line);
+  width: 100%; height: 100%; object-fit: cover;
+  background: #110e0c; display: block;
+  transition: none;
 }
 
 .veg-tag-badge {
