@@ -86,45 +86,61 @@ export default function App() {
               className="developer-credit-footer"
               style={{
                 width: '100%',
-                padding: '14px 16px',
+                padding: '16px 20px',
                 textAlign: 'center',
-                fontSize: '12px',
-                fontWeight: '500',
-                fontFamily: "'Poppins', sans-serif",
-                color: 'var(--cream-dim)',
-                background: 'rgba(10, 7, 3, 0.4)',
-                borderTop: '1px solid rgba(216, 161, 58, 0.15)',
-                letterSpacing: '0.5px',
+                fontSize: '11px',
+                fontFamily: "'Plus Jakarta Sans', 'Outfit', sans-serif",
+                color: 'rgba(230, 218, 196, 0.55)',
+                background: 'linear-gradient(180deg, rgba(14, 10, 5, 0) 0%, rgba(14, 10, 5, 0.8) 100%)',
+                borderTop: '1px solid rgba(216, 161, 58, 0.12)',
+                letterSpacing: '1.2px',
+                textTransform: 'uppercase',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '5px',
+                gap: '8px',
                 marginTop: 'auto',
               }}
             >
-              <span>designed &amp; developed by</span>
+              <span style={{ fontWeight: 500 }}>Designed &amp; Developed by</span>
               <a
                 href="https://arohi.dev"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  color: 'var(--gold)',
+                  fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif",
                   fontWeight: 800,
+                  fontSize: '12px',
+                  letterSpacing: '0.8px',
+                  color: '#d8a13a',
+                  background: 'rgba(216, 161, 58, 0.08)',
+                  border: '1px solid rgba(216, 161, 58, 0.25)',
+                  padding: '3px 12px',
+                  borderRadius: '20px',
                   textDecoration: 'none',
-                  letterSpacing: '0.6px',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
+                  boxShadow: '0 0 10px rgba(216, 161, 58, 0.15)',
+                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#ffffff';
-                  e.currentTarget.style.textDecoration = 'underline';
+                  e.currentTarget.style.color = '#120d06';
+                  e.currentTarget.style.background = '#d8a13a';
+                  e.currentTarget.style.borderColor = '#d8a13a';
+                  e.currentTarget.style.boxShadow = '0 0 16px rgba(216, 161, 58, 0.5)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = 'var(--gold)';
-                  e.currentTarget.style.textDecoration = 'none';
+                  e.currentTarget.style.color = '#d8a13a';
+                  e.currentTarget.style.background = 'rgba(216, 161, 58, 0.08)';
+                  e.currentTarget.style.borderColor = 'rgba(216, 161, 58, 0.25)';
+                  e.currentTarget.style.boxShadow = '0 0 10px rgba(216, 161, 58, 0.15)';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                arohi.dev
+                arohi.dev <span style={{ fontSize: '11px' }}>↗</span>
               </a>
             </footer>
           </div>
