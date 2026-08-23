@@ -77,6 +77,35 @@ export default function App() {
               }
             />
           </Routes>
+
+          {/* Developer credit badge at right corner bottom */}
+          <div
+            className="developer-credit-footer"
+            style={{
+              position: 'fixed',
+              bottom: '10px',
+              right: '16px',
+              zIndex: 99999,
+              fontSize: '11px',
+              fontWeight: '600',
+              fontFamily: 'Poppins, sans-serif',
+              color: 'var(--cream-dim)',
+              background: 'rgba(15, 10, 4, 0.85)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              padding: '5px 12px',
+              borderRadius: '20px',
+              border: '1px solid rgba(216, 161, 58, 0.3)',
+              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.6)',
+              pointerEvents: 'none',
+              letterSpacing: '0.3px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+            }}
+          >
+            designed and developed by <span style={{ color: 'var(--gold)', fontWeight: 800 }}>arohi.dev</span>
+          </div>
         </BrowserRouter>
       </CartProvider>
     </AuthProvider>
