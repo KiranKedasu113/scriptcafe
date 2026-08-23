@@ -6,17 +6,28 @@ export function LoginPage() {
   const { status, role, login } = useAuth();
   const location = useLocation();
 
+  const [loginMode, setLoginMode] = useState('ADMIN'); // 'ADMIN' | 'CASHIER'
+  const [email, setEmail] = useState('admin@ishacafe.com');
+  const [password, setPassword] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+
   const defaultRoute = role === 'ADMIN' ? '/admin' : role === 'KITCHEN' ? '/kitchen' : '/cashier';
   const targetRoute = (role === 'ADMIN' && (!location.state?.from || location.state?.from === '/cashier'))
     ? '/admin'
     : (location.state?.from || defaultRoute);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState(null);
-
   if (status === 'signed-in') return <Navigate to={targetRoute} replace />;
+
+  function handleSwitchMode(mode) {
+    setLoginMode(mode);
+    setError(null);
+    if (mode === 'ADMIN') {
+      setEmail('admin@ishacafe.com');
+    } else {
+      setEmail('cashier@ishacafe.com');
+    }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -37,7 +48,57 @@ export function LoginPage() {
         <div className="login-header">
           <div className="login-logo">ISHA<br />CAFE</div>
           <h1>Staff Portal</h1>
-          <p>Sign in to access Cashier · Kitchen · Admin</p>
+          <p>Select portal mode to sign in</p>
+        </div>
+
+        {/* Portal Mode Selector Buttons */}
+        <div style={{ display: 'flex', gap: 10, marginBottom: 20, padding: 4, background: 'rgba(0,0,0,0.3)', borderRadius: 10, border: '1px solid var(--line)' }}>
+          <button
+            type="button"
+            onClick={() => handleSwitchMode('ADMIN')}
+            style={{
+              flex: 1,
+              padding: '10px 8px',
+              fontSize: '13px',
+              fontWeight: 800,
+              fontFamily: 'Poppins',
+              borderRadius: 8,
+              border: loginMode === 'ADMIN' ? '1.5px solid var(--gold)' : '1px solid transparent',
+              background: loginMode === 'ADMIN' ? 'var(--gold)' : 'transparent',
+              color: loginMode === 'ADMIN' ? '#1a1205' : 'var(--cream-dim)',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6
+            }}
+          >
+            👑 Admin Login
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSwitchMode('CASHIER')}
+            style={{
+              flex: 1,
+              padding: '10px 8px',
+              fontSize: '13px',
+              fontWeight: 800,
+              fontFamily: 'Poppins',
+              borderRadius: 8,
+              border: loginMode === 'CASHIER' ? '1.5px solid var(--gold)' : '1px solid transparent',
+              background: loginMode === 'CASHIER' ? 'var(--gold)' : 'transparent',
+              color: loginMode === 'CASHIER' ? '#1a1205' : 'var(--cream-dim)',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6
+            }}
+          >
+            🧾 Cashier Login
+          </button>
         </div>
 
         {status === 'unauthorized' && (
@@ -73,7 +134,7 @@ ON CONFLICT (user_id) DO UPDATE SET role = 'ADMIN', is_active = true;`}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div className="login-field">
-            <label>Email address</label>
+            <label>{loginMode === 'ADMIN' ? 'Admin Email Address' : 'Cashier Email Address'}</label>
             <input
               id="login-email"
               type="email"
@@ -105,7 +166,7 @@ ON CONFLICT (user_id) DO UPDATE SET role = 'ADMIN', is_active = true;`}
             disabled={submitting}
             style={{ padding: '12px', fontSize: '15px', marginTop: 4 }}
           >
-            {submitting ? 'Signing in…' : '→ Sign in'}
+            {submitting ? 'Signing in…' : loginMode === 'ADMIN' ? '→ Sign in to Admin Portal' : '→ Sign in to Cashier Station'}
           </button>
         </form>
 
