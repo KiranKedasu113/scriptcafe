@@ -26,12 +26,11 @@ export async function fetchActiveOrders() {
 }
 
 export async function fetchActiveAndPrintedOrders() {
-  // Query 1: Active orders
+  // Query 1: Active orders (includes both POS Cashier and QR Customer orders)
   const { data: active, error: activeErr } = await supabase
     .from('orders')
     .select(ORDER_COLUMNS)
     .not('order_status', 'in', '(COMPLETED,CANCELLED)')
-    .eq('source', 'QR')
     .order('created_at', { ascending: true });
 
   if (activeErr) throw new Error(activeErr.message || 'Failed to load active orders');
@@ -41,7 +40,6 @@ export async function fetchActiveAndPrintedOrders() {
     .from('orders')
     .select(ORDER_COLUMNS)
     .eq('order_status', 'COMPLETED')
-    .eq('source', 'QR')
     .order('created_at', { ascending: false })
     .limit(20);
 
