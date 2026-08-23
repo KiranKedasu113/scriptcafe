@@ -210,6 +210,10 @@ export function POSPage() {
 
   const pendingCount = (orders.active || []).filter(o => o.order_status === 'NEW' || o.order_status === 'ACCEPTED').length;
 
+  const allOrdersList = [...(orders.active || []), ...(orders.completed || [])];
+  const maxToken = allOrdersList.reduce((max, o) => Math.max(max, Number(o.token_number || 0)), 0);
+  const nextTokenNum = maxToken > 0 ? maxToken + 1 : 182;
+
   return (
     <div className="pos-page-wrap">
       <StaffNav>
@@ -247,6 +251,7 @@ export function POSPage() {
           <POSCartPanel
             cart={cart}
             tables={tables}
+            nextTokenNum={nextTokenNum}
             onPlaceOrder={handlePlaceOrder}
             isSubmitting={isSubmitting}
             error={error}

@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import { ORDER_TYPE } from '../../utils/constants';
 import { formatCurrency } from '../../utils/formatCurrency';
 
-// Token counter persists across orders within the session
-let _tokenCounter = 101;
-function nextToken() { return _tokenCounter++; }
-
-export function POSCartPanel({ cart, tables, onPlaceOrder, isSubmitting, error, gst, setGst }) {
-  const [tokenNum] = useState(() => nextToken());
+export function POSCartPanel({ cart, tables, nextTokenNum, onPlaceOrder, isSubmitting, error, gst, setGst }) {
   const [customName, setCustomName] = useState('');
   const [showCustom, setShowCustom] = useState(false);
 
@@ -49,7 +44,7 @@ export function POSCartPanel({ cart, tables, onPlaceOrder, isSubmitting, error, 
       {/* Token + Table selector */}
       <div className="cart-meta">
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
-          <div className="token-badge">TOKEN #<span>{tokenNum}</span></div>
+          <div className="token-badge">NEXT TOKEN #<span>{nextTokenNum || '—'}</span></div>
           <select
             id="pos-table-select"
             className="pos-select"
