@@ -9,12 +9,16 @@ const TABS = [
 ];
 
 export function AdminLayout() {
-  const { user, signOut } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   async function handleSignOut() {
-    await signOut();
-    navigate('/staff/login');
+    try {
+      await logout();
+    } catch (e) {
+      console.error('Logout failed:', e);
+    }
+    navigate('/staff/login', { replace: true });
   }
 
   return (
