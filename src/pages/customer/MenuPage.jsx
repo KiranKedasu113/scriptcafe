@@ -58,6 +58,9 @@ export function MenuPage() {
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [sortBy, setSortBy] = useState('default'); // 'default', 'price_low_high', 'price_high_low'
+  const [dietFilter, setDietFilter] = useState('all'); // 'all', 'veg', 'nonveg'
+  const [maxPriceFilter, setMaxPriceFilter] = useState(null); // null, 100, 200
   const [tableStatus, setTableStatus] = useState(qrToken ? 'checking' : 'takeaway');
   const [tableInfo, setTableInfo] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -250,12 +253,46 @@ export function MenuPage() {
 
   const q = search.trim().toLowerCase();
 
-  const filteredCategories = q
-    ? categories.map((cat) => ({
+  const processItems = (items) => {
+    let list = [...items];
+
+    if (dietFilter === 'veg') {
+      list = list.filter((i) => i.is_veg);
+    } else if (dietFilter === 'nonveg') {
+      list = list.filter((i) => !i.is_veg);
+    }
+
+    if (maxPriceFilter) {
+      list = list.filter((i) => Number(i.price) <= maxPriceFilter);
+    }
+
+    if (sortBy === 'price_low_high') {
+      list.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (sortBy === 'price_high_low') {
+      list.sort((a, b) => Number(b.price) - Number(a.price));
+    }
+
+    return list;
+  };
+
+  const filteredCategories = categories
+    .map((cat) => {
+      let catItems = cat.items;
+
+      if (q) {
+        catItems = catItems.filter(
+          (i) => i.name.toLowerCase().includes(q) || (i.code && String(i.code).includes(q))
+        );
+      }
+
+      catItems = processItems(catItems);
+
+      return {
         ...cat,
-        items: cat.items.filter((i) => i.name.toLowerCase().includes(q) || (i.code && String(i.code).includes(q))),
-      })).filter((cat) => cat.items.length > 0)
-    : categories;
+        items: catItems,
+      };
+    })
+    .filter((cat) => cat.items.length > 0);
 
   const displayedCategories = selectedCategory === 'All'
     ? filteredCategories
@@ -285,7 +322,7 @@ export function MenuPage() {
         </div>
       </header>
 
-      {/* 3. SEARCH BAR */}
+      {/* 3. SEARCH BAR & FILTERS */}
       <div className="search-wrap">
         <div className="search-input-box">
           <input
@@ -300,6 +337,63 @@ export function MenuPage() {
               onClick={() => setSearch('')}
             >
               ✕
+            </button>
+          )}
+        </div>
+
+        {/* PRICE SORT & DIET FILTER BAR */}
+        <div className="filter-sort-bar">
+          <div className={`filter-chip sort-chip ${sortBy !== 'default' ? 'active-sort' : ''}`}>
+            <span>⇅</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="sort-dropdown"
+            >
+              <option value="default">Sort by Price</option>
+              <option value="price_low_high">Price: Low to High (₹ → ₹₹₹)</option>
+              <option value="price_high_low">Price: High to Low (₹₹₹ → ₹)</option>
+            </select>
+          </div>
+
+          <button
+            className={`filter-chip ${dietFilter === 'veg' ? 'active-veg' : ''}`}
+            onClick={() => setDietFilter((prev) => (prev === 'veg' ? 'all' : 'veg'))}
+          >
+            <span className="dot veg" /> Veg
+          </button>
+          
+          <button
+            className={`filter-chip ${dietFilter === 'nonveg' ? 'active-nonveg' : ''}`}
+            onClick={() => setDietFilter((prev) => (prev === 'nonveg' ? 'all' : 'nonveg'))}
+          >
+            <span className="dot nonveg" /> Non-Veg
+          </button>
+
+          <button
+            className={`filter-chip ${maxPriceFilter === 100 ? 'active-price' : ''}`}
+            onClick={() => setMaxPriceFilter((prev) => (prev === 100 ? null : 100))}
+          >
+            Under ₹100
+          </button>
+
+          <button
+            className={`filter-chip ${maxPriceFilter === 200 ? 'active-price' : ''}`}
+            onClick={() => setMaxPriceFilter((prev) => (prev === 200 ? null : 200))}
+          >
+            Under ₹200
+          </button>
+
+          {(sortBy !== 'default' || dietFilter !== 'all' || maxPriceFilter !== null) && (
+            <button
+              className="filter-chip clear-chip"
+              onClick={() => {
+                setSortBy('default');
+                setDietFilter('all');
+                setMaxPriceFilter(null);
+              }}
+            >
+              ✕ Reset
             </button>
           )}
         </div>
@@ -384,7 +478,21 @@ export function MenuPage() {
 
         {displayedCategories.length === 0 && (
           <div style={{ textAlign: 'center', padding: '40px 10px', color: 'var(--cream-dim)', fontSize: 14 }}>
-            No dishes found matching search.
+            <div>No dishes found matching search/filter criteria.</div>
+            {(search || sortBy !== 'default' || dietFilter !== 'all' || maxPriceFilter !== null) && (
+              <button
+                className="filter-chip clear-chip"
+                style={{ marginTop: 12 }}
+                onClick={() => {
+                  setSearch('');
+                  setSortBy('default');
+                  setDietFilter('all');
+                  setMaxPriceFilter(null);
+                }}
+              >
+                ✕ Clear All Filters
+              </button>
+            )}
           </div>
         )}
       </div>
