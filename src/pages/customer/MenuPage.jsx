@@ -567,8 +567,12 @@ export function MenuPage() {
                 <div style={{ fontFamily: 'Poppins', fontSize: 24, color: 'var(--gold)', fontWeight: 800, margin: '6px 0' }}>
                   Score: {gameScore} Pts
                 </div>
-                <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--gold)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 1 }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--gold)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
                   Rank: {gameLives <= 0 ? '💥 Blown Up' : gameScore >= 200 ? '🏆 Risk Legend' : '🔥 Risk Master'}
+                </div>
+
+                <div style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 800, marginBottom: 12, background: 'rgba(216,161,58,0.15)', border: '1px solid rgba(216,161,58,0.4)', padding: '5px 14px', borderRadius: 20, display: 'inline-block', letterSpacing: 0.5 }}>
+                  📍 {(orderType === ORDER_TYPE.DINE_IN && (tableInfo?.table_number || table?.table_number)) ? `Table ${tableInfo?.table_number || table?.table_number}` : 'Takeaway'}
                 </div>
 
                 <div style={{ background: 'rgba(216,161,58,0.15)', border: '1.5px dashed var(--gold)', borderRadius: 12, padding: '12px 14px', marginBottom: 14, textAlign: 'center' }}>
