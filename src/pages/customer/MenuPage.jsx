@@ -571,9 +571,27 @@ export function MenuPage() {
                   Rank: {gameLives <= 0 ? '💥 Blown Up' : gameScore >= 200 ? '🏆 Risk Legend' : '🔥 Risk Master'}
                 </div>
 
-                <div style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 800, marginBottom: 12, background: 'rgba(216,161,58,0.15)', border: '1px solid rgba(216,161,58,0.4)', padding: '5px 14px', borderRadius: 20, display: 'inline-block', letterSpacing: 0.5 }}>
-                  📍 {(orderType === ORDER_TYPE.DINE_IN && (tableInfo?.table_number || table?.table_number)) ? `Table ${tableInfo?.table_number || table?.table_number}` : 'Takeaway'}
-                </div>
+                {(() => {
+                  const tableNum = tableInfo?.table_number || table?.table_number || placedOrder?.table_number;
+                  const isDineIn = (orderType === ORDER_TYPE.DINE_IN || !!tableNum) && tableNum;
+                  return (
+                    <div style={{
+                      fontSize: 13.5,
+                      color: '#1a1205',
+                      background: 'var(--gold)',
+                      fontWeight: 900,
+                      margin: '4px 0 12px',
+                      padding: '5px 16px',
+                      borderRadius: 20,
+                      display: 'inline-block',
+                      letterSpacing: 0.5,
+                      boxShadow: '0 2px 10px rgba(216,161,58,0.3)',
+                      textTransform: 'uppercase'
+                    }}>
+                      {isDineIn ? `📍 Table ${tableNum}` : '🛍️ Takeaway'}
+                    </div>
+                  );
+                })()}
 
                 <div style={{ background: 'rgba(216,161,58,0.15)', border: '1.5px dashed var(--gold)', borderRadius: 12, padding: '12px 14px', marginBottom: 14, textAlign: 'center' }}>
                   <div style={{ fontFamily: 'Poppins', fontWeight: 800, fontSize: 13.5, color: 'var(--gold)', marginBottom: 4 }}>
