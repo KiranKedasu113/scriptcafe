@@ -322,18 +322,18 @@ export function MenuPage() {
         </div>
       </header>
 
-      {/* 3. SEARCH BAR & FILTERS */}
-      <div className="search-wrap">
-        <div className="search-input-box">
+      {/* 3. SEARCH BAR & DIET FILTERS */}
+      <div className="search-wrap" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="search-input-box" style={{ flex: 1, minWidth: 0 }}>
           <input
             id="menu-search-input"
-            placeholder="Search dishes, momos, pizzas, shakes..."
+            placeholder="Search dishes..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           {search && (
             <button
-              style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--cream-dim)', cursor: 'pointer' }}
+              style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--cream-dim)', cursor: 'pointer' }}
               onClick={() => setSearch('')}
             >
               ✕
@@ -341,7 +341,23 @@ export function MenuPage() {
           )}
         </div>
 
-
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+          <button
+            className={`filter-chip ${dietFilter === 'veg' ? 'active-veg' : ''}`}
+            onClick={() => setDietFilter((prev) => (prev === 'veg' ? 'all' : 'veg'))}
+            style={{ padding: '8px 10px', fontSize: '11px' }}
+          >
+            <span className="dot veg" /> Veg
+          </button>
+          
+          <button
+            className={`filter-chip ${dietFilter === 'nonveg' ? 'active-nonveg' : ''}`}
+            onClick={() => setDietFilter((prev) => (prev === 'nonveg' ? 'all' : 'nonveg'))}
+            style={{ padding: '8px 10px', fontSize: '11px' }}
+          >
+            <span className="dot nonveg" /> Non-Veg
+          </button>
+        </div>
       </div>
 
       {/* 4. CATEGORY HORIZONTAL PILLS SCROLL */}
