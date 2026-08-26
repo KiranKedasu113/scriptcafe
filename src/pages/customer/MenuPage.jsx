@@ -341,62 +341,7 @@ export function MenuPage() {
           )}
         </div>
 
-        {/* PRICE SORT & DIET FILTER BAR */}
-        <div className="filter-sort-bar">
-          <div className={`filter-chip sort-chip ${sortBy !== 'default' ? 'active-sort' : ''}`}>
-            <span>⇅</span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="sort-dropdown"
-            >
-              <option value="default">Sort by Price</option>
-              <option value="price_low_high">Price: Low to High (₹ → ₹₹₹)</option>
-              <option value="price_high_low">Price: High to Low (₹₹₹ → ₹)</option>
-            </select>
-          </div>
 
-          <button
-            className={`filter-chip ${dietFilter === 'veg' ? 'active-veg' : ''}`}
-            onClick={() => setDietFilter((prev) => (prev === 'veg' ? 'all' : 'veg'))}
-          >
-            <span className="dot veg" /> Veg
-          </button>
-          
-          <button
-            className={`filter-chip ${dietFilter === 'nonveg' ? 'active-nonveg' : ''}`}
-            onClick={() => setDietFilter((prev) => (prev === 'nonveg' ? 'all' : 'nonveg'))}
-          >
-            <span className="dot nonveg" /> Non-Veg
-          </button>
-
-          <button
-            className={`filter-chip ${maxPriceFilter === 100 ? 'active-price' : ''}`}
-            onClick={() => setMaxPriceFilter((prev) => (prev === 100 ? null : 100))}
-          >
-            Under ₹100
-          </button>
-
-          <button
-            className={`filter-chip ${maxPriceFilter === 200 ? 'active-price' : ''}`}
-            onClick={() => setMaxPriceFilter((prev) => (prev === 200 ? null : 200))}
-          >
-            Under ₹200
-          </button>
-
-          {(sortBy !== 'default' || dietFilter !== 'all' || maxPriceFilter !== null) && (
-            <button
-              className="filter-chip clear-chip"
-              onClick={() => {
-                setSortBy('default');
-                setDietFilter('all');
-                setMaxPriceFilter(null);
-              }}
-            >
-              ✕ Reset
-            </button>
-          )}
-        </div>
       </div>
 
       {/* 4. CATEGORY HORIZONTAL PILLS SCROLL */}
